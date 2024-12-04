@@ -1,0 +1,129 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Elemento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5B7373; /* Dark green */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #5B7373; /* Dark green */
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+            margin: 5px;
+        }
+        .buttons .cancel {
+            background-color: #C8BC91; /* Light beige */
+        }
+        .buttons .modify {
+            background-color: #5B7373; /* Dark green */
+            color: #fff;
+        }
+        /* Estilo para los mensajes */
+        .messages {
+            margin-bottom: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .messages li {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            color: #000;
+        }
+        .messages .success {
+            background-color: #d4edda; /* Green */
+        }
+        .messages .error {
+            background-color: #f8d7da; /* Red */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MODIFICAR ELEMENTO</h1>
+        
+        <!-- Mostrar mensajes -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="seleccionar">Seleccionar elemento:</label>
+            <select id="seleccionar" name="seleccionar">
+                <!-- Opciones de ejemplo, reemplazar con datos reales -->
+                <option value="1">Almirante</option>
+                <option value="2">Vice Almirante</option>
+                <option value="3">Capitán</option>
+            </select>
+
+            <label for="nombres">Nombre(s):</label>
+            <input type="text" id="nombres" name="nombres" required>
+            
+            <label for="apellido_paterno">Apellido paterno:</label>
+            <input type="text" id="apellido_paterno" name="apellido_paterno" required>
+            
+            <label for="apellido_materno">Apellido materno:</label>
+            <input type="text" id="apellido_materno" name="apellido_materno" required>
+            
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" required>
+            
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad" required>
+            
+            <div class="buttons">
+                <button type="button" class="cancel" onclick="window.location.href='{% url 'pantalla_principal' %}'">Cancelar</button>
+                <button type="submit" class="modify">Modificar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

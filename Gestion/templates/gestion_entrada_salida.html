@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Entrada y Salida</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #798C8C;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 100px auto;
+            padding: 50px;
+            background-color: #94A3A3;
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffff;
+            text-shadow: 0 0 5px #5B7373;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            color: #333;
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #5B7373;
+            border-radius: 5px;
+        }
+
+        .matricula, .accion {
+            background-color: #adbbbb;
+            border: solid 1px #798C8C;
+        }
+
+        .matricula:focus, .accion:focus {
+            border-color: #5B7373;
+            box-shadow: 0 0 5px #5B7373;
+            outline: none;
+            background-color: #becaca;
+        }
+
+
+        button {
+            background-color: #C8BC91;
+            color: #fff;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #798C8C;
+        }
+
+        button.cancel {
+            background-color: #5B7373;
+        }
+
+        button.cancel:hover {
+            background-color: #798C8C;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .message {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .employee-info {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #becaca;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        function fetchEmployeeInfo() {
+            const matricula = document.getElementById('matricula').value;
+            if (matricula) {
+                fetch(`/api/empleado/${matricula}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('employee-info').innerHTML = `
+                            <p><strong>Nombre:</strong> ${data.nombre}</p>
+                            <p><strong>Apellido Paterno:</strong> ${data.apellido_paterno}</p>
+                            <p><strong>Apellido Materno:</strong> ${data.apellido_materno}</p>
+                            <p><strong>Cargo:</strong> ${data.cargo}</p>
+                            <p><strong>Área:</strong> ${data.area}</p>
+                            <p><strong>Grado:</strong> ${data.grado}</p>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('employee-info').innerHTML = '<p>Error al obtener la información del empleado.</p>';
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Entrada y Salida</h1>
+        {% if message %}
+            <div class="message {% if message_type == 'success' %}success{% else %}error{% endif %}">
+                {{ message }}
+            </div>
+        {% endif %}
+        <form method="POST" action="{% url 'procesar_entrada_salida' %}">
+            {% csrf_token %}
+            <label for="matricula">Matrícula del Empleado:</label>
+            <input type="text" class="matricula" id="matricula" name="matricula" oninput="fetchEmployeeInfo()" required>
+            
+            <label for="accion">Acción:</label>
+            <select class="accion" id="accion" name="accion" required>
+                <option value="">Seleccionar Acción</option>
+                <option value="entrada">Entrada</option>
+                <option value="salida">Salida</option>
+            </select>
+            
+            <div class="buttons">
+                <button type="submit">Registrar</button>
+                <button type="button" class="cancel" onclick="location.href='{% url 'pantalla_principal' %}'">Cancelar</button>
+            </div>
+        </form>
+        <div id="employee-info" class="employee-info">
+            <!-- Información del empleado se mostrará aquí -->
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Color de fondo suave */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    max-width: 600px; /* Ancho máximo */
+    margin: 50px auto; /* Centrar horizontalmente */
+    padding: 20px;
+    background-color: #fff; /* Color de fondo blanco */
+    border: 2px solid #007bff; /* Bordes */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+h1 {
+    text-align: center; /* Centrar el título */
+    color: #007bff; /* Color del título */
+}
+
+.roles {
+    display: flex; /* Usar flexbox para centrar botones */
+    justify-content: center; /* Centrar horizontalmente */
+    gap: 20px; /* Espacio entre botones */
+    margin-top: 20px;
+}
+
+.role-button {
+    padding: 10px 20px; /* Relleno */
+    background-color: #007bff; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+    border-radius: 5px; /* Bordes redondeados del botón */
+    transition: background-color 0.3s; /* Transición suave */
+}
+
+.role-button:hover {
+    background-color: #0056b3; /* Color al pasar el mouse */
+}

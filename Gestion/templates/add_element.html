@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Empleado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #798C8C;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #94A3A3;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffff;
+            text-shadow: 0 0 5px #5B7373;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #798C8C;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #adbbbb;
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: #5B7373;
+            box-shadow: 0 0 5px #5B7373;
+            outline: none;
+            background-color: #becaca;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .buttons .add, .buttons .cancel {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .buttons .add {
+            background-color: #C8BC91;
+            color: #fff;
+        }
+        .buttons .cancel {
+            background-color: #5B7373;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+            line-height: 36px; /* same as padding for centering vertically */
+        }
+        .buttons .cancel:hover {
+            background-color: #798C8C;
+        }
+        .buttons .add:hover {
+            background-color: #798C8C;
+        }
+    </style>
+    <script>
+        // Función para validar el formulario
+        function validateForm() {
+            const nombre = document.getElementById('nombre').value;
+            const apellidoPaterno = document.getElementById('apellido_paterno').value;
+            const apellidoMaterno = document.getElementById('apellido_materno').value;
+            const matricula = document.getElementById('matricula').value;
+            const namePattern = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+            
+            if (nombre === '' || apellidoPaterno === '' || apellidoMaterno === '' || matricula === '') {
+                alert('Todos los campos son obligatorios.');
+                return false;
+            }
+            
+            if (nombre.length > 50 || apellidoPaterno.length > 50 || apellidoMaterno.length > 50 || matricula.length > 18) {
+                alert('Los campos no deben exceder la longitud permitida.');
+                return false;
+            }
+            
+            if (!namePattern.test(nombre) || !namePattern.test(apellidoPaterno) || !namePattern.test(apellidoMaterno)) {
+                alert('Los nombres y apellidos solo deben contener letras.');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Función para evitar que se tecleen números
+        function allowOnlyLetters(event) {
+            const charCode = event.charCode;
+            if ((charCode >= 48 && charCode <= 57)) {
+                event.preventDefault();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>{% if is_editing %}Modificar{% else %}Agregar{% endif %} Empleado</h1>
+        <form method="POST" action="{% if is_editing %}{% url 'modify_element' %}{% else %}{% url 'add_element' %}{% endif %}" onsubmit="return validateForm();">
+            {% csrf_token %}
+            <input type="hidden" name="is_editing" value="{% if is_editing %}true{% else %}false{% endif %}">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras y espacios" onkeypress="allowOnlyLetters(event)">
+            
+            <label for="apellido_paterno">Apellido Paterno:</label>
+            <input type="text" id="apellido_paterno" name="apellido_paterno" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras y espacios" onkeypress="allowOnlyLetters(event)">
+            
+            <label for="apellido_materno">Apellido Materno:</label>
+            <input type="text" id="apellido_materno" name="apellido_materno" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras y espacios" onkeypress="allowOnlyLetters(event)">
+            
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" required>
+            
+            <label for="cargo">Cargo:</label>
+<select id="cargo" name="cargo" required>
+    <option value="">Seleccionar cargo</option>
+    <optgroup label="Jefes">
+        <option value="JEFE DE CARPINTERIA.RN-7" {% if empleado.cargo == "JEFE DE CARPINTERIA.RN-7" %}selected{% endif %}>JEFE DE CARPINTERIA.RN-7</option>
+        <option value="JEFE ADMINISTRATIVO.RN-7" {% if empleado.cargo == "JEFE ADMINISTRATIVO.RN-7" %}selected{% endif %}>JEFE ADMINISTRATIVO.RN-7</option>
+        <option value="JEFE COMUNAV.RN-7" {% if empleado.cargo == "JEFE COMUNAV.RN-7" %}selected{% endif %}>JEFE COMUNAV.RN-7</option>
+        <option value="JEFE DE COMPUTO.RN-7" {% if empleado.cargo == "JEFE DE COMPUTO.RN-7" %}selected{% endif %}>JEFE DE COMPUTO.RN-7</option>
+        <option value="JEFE DE ESTADO MAYOR.RN-7" {% if empleado.cargo == "JEFE DE ESTADO MAYOR.RN-7" %}selected{% endif %}>JEFE DE ESTADO MAYOR.RN-7</option>
+        <option value="JEFE DE S-1.RN-7" {% if empleado.cargo == "JEFE DE S-1.RN-7" %}selected{% endif %}>JEFE DE S-1.RN-7</option>
+        <option value="JEFE DE S-2.RN-7" {% if empleado.cargo == "JEFE DE S-2.RN-7" %}selected{% endif %}>JEFE DE S-2.RN-7</option>
+        <option value="JEFE DE S-3.RN-7" {% if empleado.cargo == "JEFE DE S-3.RN-7" %}selected{% endif %}>JEFE DE S-3.RN-7</option>
+        <option value="JEFE DE S-4.RN-7" {% if empleado.cargo == "JEFE DE S-4.RN-7" %}selected{% endif %}>JEFE DE S-4.RN-7</option>
+        <option value="JEFE DE SERVICIOS.RN-7" {% if empleado.cargo == "JEFE DE SERVICIOS.RN-7" %}selected{% endif %}>JEFE DE SERVICIOS.RN-7</option>
+        <option value="JEFE DE TALLERES.RN-7" {% if empleado.cargo == "JEFE DE TALLERES.RN-7" %}selected{% endif %}>JEFE DE TALLERES.RN-7</option>
+        <option value="JEFE DEL DETALL.RN-7" {% if empleado.cargo == "JEFE DEL DETALL.RN-7" %}selected{% endif %}>JEFE DEL DETALL.RN-7</option>
+        <option value="JEFE JURIDICO.RN-7" {% if empleado.cargo == "JEFE JURIDICO.RN-7" %}selected{% endif %}>JEFE JURIDICO.RN-7</option>
+    </optgroup>
+    <optgroup label="Subinspectores">
+        <option value="SUBINSPECTOR ADMIN.RN-7" {% if empleado.cargo == "SUBINSPECTOR ADMIN.RN-7" %}selected{% endif %}>SUBINSPECTOR ADMIN.RN-7</option>
+        <option value="SUBDIR.INSP.V.PES.R. CARIBE" {% if empleado.cargo == "SUBDIR.INSP.V.PES.R. CARIBE" %}selected{% endif %}>SUBDIR.INSP.V.PES.R. CARIBE</option>
+    </optgroup>
+    <optgroup label="Otros Cargos">
+        <option value="ANALIS JURIDIC A RN-7" {% if empleado.cargo == "ANALIS JURIDIC A RN-7" %}selected{% endif %}>ANALIS JURIDIC A RN-7</option>
+        <option value="AYUDANTE NAVAL.RN-7" {% if empleado.cargo == "AYUDANTE NAVAL.RN-7" %}selected{% endif %}>AYUDANTE NAVAL.RN-7</option>
+        <option value="COMANDANTE DE.RN-7" {% if empleado.cargo == "COMANDANTE DE.RN-7" %}selected{% endif %}>COMANDANTE DE.RN-7</option>
+        <option value="INSP.F.PESCA 86" {% if empleado.cargo == "INSP.F.PESCA 86" %}selected{% endif %}>INSP.F.PESCA 86</option>
+        <option value="INSPECTOR.RN-7" {% if empleado.cargo == "INSPECTOR.RN-7" %}selected{% endif %}>INSPECTOR.RN-7</option>
+        <option value="J. DE CONDESTABLE.RN-7" {% if empleado.cargo == "J. DE CONDESTABLE.RN-7" %}selected{% endif %}>J. DE CONDESTABLE.RN-7</option>
+        <option value="J. DE CONTRAMAESTRE.RN-7" {% if empleado.cargo == "J. DE CONTRAMAESTRE.RN-7" %}selected{% endif %}>J. DE CONTRAMAESTRE.RN-7</option>
+        <option value="J. DE TRANSPORTES.RN-7" {% if empleado.cargo == "J. DE TRANSPORTES.RN-7" %}selected{% endif %}>J. DE TRANSPORTES.RN-7</option>
+        <option value="J. DEPTO. DEL RUE..RN-7" {% if empleado.cargo == "J. DEPTO. DEL RUE..RN-7" %}selected{% endif %}>J. DEPTO. DEL RUE..RN-7</option>
+        <option value="J. TRABAJOS SUBMARINOS.RN-7" {% if empleado.cargo == "J. TRABAJOS SUBMARINOS.RN-7" %}selected{% endif %}>J. TRABAJOS SUBMARINOS.RN-7</option>
+        <option value="J.CTROL.CONT.ADQ.RN-7" {% if empleado.cargo == "J.CTROL.CONT.ADQ.RN-7" %}selected{% endif %}>J.CTROL.CONT.ADQ.RN-7</option>
+        <option value="J.CTROL.PRESU. ARM.RN-7" {% if empleado.cargo == "J.CTROL.PRESU. ARM.RN-7" %}selected{% endif %}>J.CTROL.PRESU. ARM.RN-7</option>
+        <option value="J.DEPTO DE ELECTRONICA.RN-7" {% if empleado.cargo == "J.DEPTO DE ELECTRONICA.RN-7" %}selected{% endif %}>J.DEPTO DE ELECTRONICA.RN-7</option>
+        <option value="J.DEPTO. DE DESPENSERO.RN-7" {% if empleado.cargo == "J.DEPTO. DE DESPENSERO.RN-7" %}selected{% endif %}>J.DEPTO. DE DESPENSERO.RN-7</option>
+        <option value="J.DEPTO. INSPECCION FIN.RN-7" {% if empleado.cargo == "J.DEPTO. INSPECCION FIN.RN-7" %}selected{% endif %}>J.DEPTO. INSPECCION FIN.RN-7</option>
+        <option value="J.DEPTO.CENTRO DE COMUN.RN-7" {% if empleado.cargo == "J.DEPTO.CENTRO DE COMUN.RN-7" %}selected{% endif %}>J.DEPTO.CENTRO DE COMUN.RN-7</option>
+        <option value="J.DEPTO.EJE.COMP.PRES.RN-7" {% if empleado.cargo == "J.DEPTO.EJE.COMP.PRES.RN-7" %}selected{% endif %}>J.DEPTO.EJE.COMP.PRES.RN-7</option>
+        <option value="J.DEPTO.PRO.MED.AMB.MA.RN-7" {% if empleado.cargo == "J.DEPTO.PRO.MED.AMB.MA.RN-7" %}selected{% endif %}>J.DEPTO.PRO.MED.AMB.MA.RN-7</option>
+        <option value="J.DEPTO.SEG.BI.SOCIAL.RN-7" {% if empleado.cargo == "J.DEPTO.SEG.BI.SOCIAL.RN-7" %}selected{% endif %}>J.DEPTO.SEG.BI.SOCIAL.RN-7</option>
+        <option value="JEFEP DEL DEPARTAMENTO DE S.T.RN-7" {% if empleado.cargo == "JEFEP DEL DEPARTAMENTO DE S.T.RN-7" %}selected{% endif %}>JEFEP DEL DEPARTAMENTO DE S.T.RN-7</option>
+        <option value="JEFE DEPTO.COORD.PROG.CONT.MAR RN-7" {% if empleado.cargo == "JEFE DEPTO.COORD.PROG.CONT.MAR RN-7" %}selected{% endif %}>JEFE DEPTO.COORD.PROG.CONT.MAR RN-7</option>
+    </optgroup>
+</select>
+
+            
+            
+<label for="area">Área:</label>
+<select id="area" name="area" required>
+    <option value="">Seleccionar área</option>
+    <optgroup label="Áreas de Inspección">
+        <option value="INSPECCION PESCA RN-7" {% if empleado.area == "INSPECCION PESCA RN-7" %}selected{% endif %}>INSPECCION PESCA RN-7</option>
+        <option value="INSPECCION RN-7" {% if empleado.area == "INSPECCION RN-7" %}selected{% endif %}>INSPECCION RN-7</option>
+    </optgroup>
+    <optgroup label="Jefaturas">
+        <option value="JEFATURA ADMIN. RN-7" {% if empleado.area == "JEFATURA ADMIN. RN-7" %}selected{% endif %}>JEFATURA ADMIN. RN-7</option>
+        <option value="JEFATURA COMUNAV. RN-7" {% if empleado.area == "JEFATURA COMUNAV. RN-7" %}selected{% endif %}>JEFATURA COMUNAV. RN-7</option>
+        <option value="JEFATURA DEL DETALL RN-7" {% if empleado.area == "JEFATURA DEL DETALL RN-7" %}selected{% endif %}>JEFATURA DEL DETALL RN-7</option>
+        <option value="JEFATURA EDO. MAY. RN-7" {% if empleado.area == "JEFATURA EDO. MAY. RN-7" %}selected{% endif %}>JEFATURA EDO. MAY. RN-7</option>
+        <option value="JEFATURA TALLERES RN-7" {% if empleado.area == "JEFATURA TALLERES RN-7" %}selected{% endif %}>JEFATURA TALLERES RN-7</option>
+    </optgroup>
+    <optgroup label="Otros">
+        <option value="RN-7" {% if empleado.area == "RN-7" %}selected{% endif %}>RN-7</option>
+        <option value="UNIDAD HABITACIONAL RN-7" {% if empleado.area == "UNIDAD HABITACIONAL RN-7" %}selected{% endif %}>UNIDAD HABITACIONAL RN-7</option>
+    </optgroup>
+</select>
+
+<label for="grado">Grado:</label>
+<select id="grado" name="grado" required>
+    <option value="">Seleccionar grado</option>
+    <optgroup label="Grados">
+        <option value="1/er. Mtre." {% if empleado.grado == "1/er. Mtre." %}selected{% endif %}>1/er. Mtre.</option>
+        <option value="2/do. Mtre." {% if empleado.grado == "2/do. Mtre." %}selected{% endif %}>2/do. Mtre.</option>
+        <option value="3/er. Mtre." {% if empleado.grado == "3/er. Mtre." %}selected{% endif %}>3/er. Mtre.</option>
+        <option value="Cabo" {% if empleado.grado == "Cabo" %}selected{% endif %}>Cabo</option>
+        <option value="Cap. Corb." {% if empleado.grado == "Cap. Corb." %}selected{% endif %}>Cap. Corb.</option>
+        <option value="Cap. Frag." {% if empleado.grado == "Cap. Frag." %}selected{% endif %}>Cap. Frag.</option>
+        <option value="Cap. Nav." {% if empleado.grado == "Cap. Nav." %}selected{% endif %}>Cap. Nav.</option>
+        <option value="Contraalmirante" {% if empleado.grado == "Contraalmirante" %}selected{% endif %}>Contraalmirante</option>
+        <option value="Mro." {% if empleado.grado == "Mro." %}selected{% endif %}>Mro.</option>
+        <option value="Tte. Corb." {% if empleado.grado == "Tte. Corb." %}selected{% endif %}>Tte. Corb.</option>
+        <option value="Tte. Frag." {% if empleado.grado == "Tte. Frag." %}selected{% endif %}>Tte. Frag.</option>
+        <option value="Tte. Nav." {% if empleado.grado == "Tte. Nav." %}selected{% endif %}>Tte. Nav.</option>
+        <option value="Vicealmirante" {% if empleado.grado == "Vicealmirante" %}selected{% endif %}>Vicealmirante</option>
+    </optgroup>
+</select>
+
+
+            
+            <div class="buttons">
+                <a href="{% url 'pantalla_principal' %}" class="cancel">Cancelar</a>
+                <button class="add" type="submit">{% if is_editing %}Modificar{% else %}Agregar{% endif %}</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

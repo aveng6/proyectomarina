@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Entrada/Salida</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5B7373; /* Dark green */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #5B7373; /* Dark green */
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+            margin: 5px;
+        }
+        .buttons .cancel {
+            background-color: #C8BC91; /* Light beige */
+        }
+        .buttons .register {
+            background-color: #5B7373; /* Dark green */
+            color: #fff;
+        }
+        /* Estilos para el mensaje emergente */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #5B7373; /* Dark green */
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Oculto por defecto */
+        }
+    </style>
+    <script>
+        function cancelar() {
+            window.location.href = '/pantalla_principal'; 
+        }
+
+        function mostrarMensajeExito() {
+            // Mostrar el mensaje emergente
+            let mensaje = document.getElementById("mensajeExito");
+            mensaje.style.display = "block";
+
+            // Quitar el mensaje después de 3 segundos
+            setTimeout(function() {
+                mensaje.style.display = "none";
+            }, 3000);
+        }
+
+        // Añadir evento al botón de registrar para mostrar el mensaje
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".register").addEventListener("click", function(event) {
+                event.preventDefault(); // Evitar el envío del formulario para demostrar el mensaje
+                mostrarMensajeExito();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Registrar Entrada/Salida</h1>
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <label for="codigo_barras">Código de Barras:</label>
+            <input type="text" name="codigo_barras" id="codigo_barras" placeholder="Escanea el código o deja vacío">
+            <p>O ingresa el CURP manualmente:</p>
+            <label for="curp_manual">CURP:</label>
+            <input type="text" name="curp_manual" id="curp_manual" placeholder="Ingresa CURP" required>
+            <div class="buttons">
+                <button type="button" class="cancel" onclick="cancelar()">Cancelar</button>
+                <button type="submit" class="register">Registrar</button>
+            </div>
+        </form>
+        <!-- Mensaje emergente -->
+        <div id="mensajeExito" class="popup">Registro Exitoso</div>
+    </div>
+</body>
+</html>

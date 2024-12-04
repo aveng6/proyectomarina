@@ -1,0 +1,36 @@
+
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecciona tu Rol</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Selecciona tu Rol</h1>
+        <div class="roles">
+            <form action="{% url 'login_view' %}" method="post">
+                {% csrf_token %}
+                <label class="role-option">
+                    <input type="radio" name="role" value="admin" required>
+                    <span class="role-name">Administrador</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="role" value="guard" required>
+                    <span class="role-name">Guardia</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="role" value="services" required>
+                    <span class="role-name">Servicios</span>
+                </label>
+                <button type="submit">Continuar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

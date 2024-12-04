@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Elemento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5B7373; /* Verde oscuro */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px; /* Reducido el margen inferior */
+            color: #5B7373; /* Verde oscuro */
+            font-size: 1.5em; /* Aumentado el tamaño de la fuente */
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px; /* Reducido el margen inferior */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons .add, .buttons .cancel {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+            margin: 5px;
+        }
+        .buttons .add {
+            background-color: #5B7373; /* Verde oscuro */
+            color: #fff;
+        }
+        .buttons .cancel {
+            background-color: #C8BC91; /* Beige claro */
+            color: #000;
+            text-decoration: none; /* Sin subrayado */
+            text-align: center; /* Centrar texto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AÑADIR ELEMENTO</h1>
+        <form method="POST" action="{% url 'pantalla_principal' %}">
+            {% csrf_token %}
+            <label for="nombres">Nombre(s):</label>
+            <input type="text" id="nombres" name="nombres" required pattern="[A-Za-z\s]+" title="Solo letras y espacios" minlength="3">
+
+            <label for="apellido_paterno">Apellido paterno:</label>
+            <input type="text" id="apellido_paterno" name="apellido_paterno" required pattern="[A-Za-z\s]+" title="Solo letras y espacios" minlength="3">
+
+            <label for="apellido_materno">Apellido materno:</label>
+            <input type="text" id="apellido_materno" name="apellido_materno" required pattern="[A-Za-z\s]+" title="Solo letras y espacios" minlength="3">
+
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" required pattern="\d{6}" title="Debe ser un número de 6 dígitos">
+
+            <label for="estatus">Situación:</label>
+<select id="estatus" name="situacion" required>  <!-- Cambié 'estatus' a 'situacion' -->
+    <option value="">SELECCIONA UNA OPCIÓN</option>
+    <option value="activo">Activo</option>
+    <option value="inactivo">Inactivo</option>
+    <option value="suspendido">Licencia</option>
+    <option value="incapacidad">Incapacidad</option>
+    <option value="arresto">Arresto</option>
+    <option value="vacaciones">Vacaciones</option>
+</select>
+
+
+            <label for="area">Área:</label>
+            <select id="area" name="area" required>
+                <option value="">SELECCIONA UNA OPCIÓN</option>
+                <option value="INSPECCION PESCA RN-7">INSPECCION PESCA RN-7</option>
+                <option value="INSPECCION RN-7">INSPECCION RN-7</option>
+                <option value="JEFATURA ADMIN. RN-7">JEFATURA ADMIN. RN-7</option>
+                <option value="JEFATURA COMUNAV. RN-7">JEFATURA COMUNAV. RN-7</option>
+                <option value="JEFATURA DEL DETALL RN-7">JEFATURA DEL DETALL RN-7</option>
+                <option value="JEFATURA EDO. MAY. RN-7">JEFATURA EDO. MAY. RN-7</option>
+                <option value="JEFATURA TALLERES RN-7">JEFATURA TALLERES RN-7</option>
+                <option value="RN-7">RN-7</option>
+                <option value="UNIDAD HABITACIONAL RN-7">UNIDAD HABITACIONAL RN-7</option>
+            </select>
+
+            <label for="grado">Grado:</label>
+            <select id="grado" name="grado" required>
+                <option value="">SELECCIONA UNA OPCIÓN</option>
+                <option value="1er_mtre">1/er. Mtre.</option>
+                <option value="2do_mtre">2/do. Mtre.</option>
+                <option value="3er_mtre">3/er. Mtre.</option>
+                <option value="cabo">Cabo</option>
+                <option value="cap_corb">Cap. Corb.</option>
+                <option value="cap_frag">Cap. Frag.</option>
+                <option value="cap_nav">Cap. Nav.</option>
+                <option value="contraalmirante">Contraalmirante</option>
+                <option value="mro">Mro.</option>
+                <option value="tte_corb">Tte. Corb.</option>
+            </select>
+
+            <div class="buttons">
+                <a href="{% url 'pantalla_principal' %}" class="cancel">Cancelar</a>
+                <button type="submit" class="add">Añadir</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

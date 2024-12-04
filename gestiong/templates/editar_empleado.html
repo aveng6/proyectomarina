@@ -1,0 +1,71 @@
+{% extends "pantalla_principal.html" %}
+{% block content %}
+<div class="container">
+    <h2>Editar Empleado</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="buttons">
+            <button type="submit" class="update">Actualizar</button>
+            <a href="{% url 'pantalla_principal' %}" class="cancel">Volver</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #5B7373; /* Dark green */
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .container {
+        background-color: #fff;
+        color: #000;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #5B7373; /* Dark green */
+    }
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+    .buttons .update {
+        background-color: #5B7373; /* Dark green */
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        flex: 1;
+        margin-right: 10px;
+    }
+    .buttons .cancel {
+        background-color: #C8BC91; /* Light beige */
+        color: #000;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        flex: 1;
+        text-decoration: none;
+    }
+    .buttons .update:hover {
+        background-color: #3e5757;
+    }
+    .buttons .cancel:hover {
+        background-color: #aabdbd;
+    }
+</style>

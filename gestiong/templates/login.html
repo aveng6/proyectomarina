@@ -1,0 +1,172 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de Sesión</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #798C8C;
+        }
+
+        .header {
+            background-color: #5B7373; /* Dark teal */
+            color: white;
+            padding: 10px 0;
+            width: 100%;
+            text-align: center;
+            position: absolute;
+        }
+
+        .login-container {
+            position: absolute;
+            top: 200px;
+            left: 350px;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #798C8C;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .roles-container {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+        }
+        .role-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #798C8C;
+            border-radius: 10px;
+            background-color: #94a3a3;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .role-button img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        .role-button p {
+            margin: 0;
+            color: black;
+            font-weight: bold;
+        }
+        .role-button:hover {
+            background-color: #c8bc91;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        form input, form button {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #798C8C;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .input-field {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #798C8C;
+            border-radius: 5px;
+        }
+        form button {
+            background-color: #5B7373;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #c8bc91;
+        }
+        #username, #login-button {
+            display: none;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #d4edda; /* Verde claro */
+            color: #155724; /* Verde oscuro */
+        }
+
+        .error {
+            background-color: #f8d7da; /* Rojo claro */
+            color: #721c24; /* Rojo oscuro */
+        }
+    </style>
+    <script>
+        function selectRole(role) {
+            document.getElementById('role').value = role;
+            document.getElementById('password').style.display = 'block';
+            document.getElementById('login-button').style.display = 'block';
+            document.getElementById('username-input').value = role; // Establecer el rol como nombre de usuario
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>INICIO DE SESIÓN</h1>
+    </div>
+    <div class="login-container">
+        
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <div class="roles-container">
+            <div class="role-button" onclick="selectRole('admin')">
+                <img src="{% static 'admin1_icon.png' %}" alt="Admin">
+                <p>Admin</p>
+            </div>
+            <div class="role-button" onclick="selectRole('guardia')">
+                <img src="{% static 'guardia1_icon.png' %}" alt="Guardia">
+                <p>Guardia</p>
+            </div>
+            <div class="role-button" onclick="selectRole('servicios')">
+                <img src="{% static 'servicios1_icon.png' %}" alt="Servicios">
+                <p>Servicios</p>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <form id="role-form" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <input type="hidden" name="role" id="role">
+                <input type="hidden" name="username" id="username-input">
+                <div id="password" style="display: none;">
+                    <label for="password-input">Contraseña:</label>
+                    <input type="password" name="password" id="password-input" class="input-field" required placeholder="Contraseña"> 
+                </div>
+                <button type="submit" id="login-button">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

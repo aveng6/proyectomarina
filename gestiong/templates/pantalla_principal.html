@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla Principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #798C8C; /* Light beige */
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #5B7373; /* Dark teal */
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        .container {
+            padding: 20px;
+        }
+        .search-bar {
+            background-color: #aabdbd;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .search-bar input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #798C8C;
+            border-radius: 5px;
+        }
+        .search-bar button {
+            padding: 10px;
+            background-color: #c0cece;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .search-bar button:hover {
+            background-color: #C8BC91; /* Beige */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #798C8C; /* Medium teal */
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #94A3A3; /* Light teal */
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            background-color: #94A3A3; /* Light teal */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .buttons button:hover {
+            background-color: #C8BC91; /* Beige */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .bottom-button {
+            padding: 15px 30px;
+            background-color: #c8bc91;
+            border: none;
+            border-radius: 10px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .bottom-button:hover {
+            background-color: #5B7373;
+            color: white;
+        }
+        .profile-container {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .profile-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 60px;
+            background-color: #c8bc91;
+            border-radius: 10px;
+            padding: 10px;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        .profile-menu .menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .menu-profile-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .profile-button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #5B7373;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .profile-button:hover {
+            background-color: #3e5757;
+        }
+        .logout-link {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            color: #721c24;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .logout-link:hover {
+            background-color: #f8d7da;
+            border-radius: 5px;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #5B7373; /* Color de fondo */
+            color: white; /* Color del texto */
+            border: none;
+            border-radius: 5px;
+            text-decoration: none; /* Sin subrayado */
+            transition: background-color 0.3s;
+            position: absolute;
+            top: 10px;
+            left: 50px;
+        }
+        .back-button:hover {
+            background-color: #798C8C; /* Color al pasar el mouse */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pantalla Principal de Gestión</h1>
+        <!-- Imagen de perfil -->
+        <div class="profile-container">
+            <img src="{% static 'usuario_icon.png' %}" alt="Profile" class="profile-image" onclick="toggleProfileMenu()">
+            <div id="profile-menu" class="profile-menu">
+                <div class="menu-header">
+                    <img src="{% static 'profile_icon.png' %}" alt="Admin" class="menu-profile-image">
+                    <p>Admin</p>
+                    <button onclick="closeProfileMenu()">X</button>
+                </div>
+                <button class="profile-button">Cambiar contraseña</button>
+                <a href="{% url 'login' %}" class="logout-link">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Buscar">
+            <button id="filter-button">Filtrar</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre(s)</th>
+                    <th>A. paterno</th>
+                    <th>A. materno</th>
+                    <th>Matrícula</th>
+                    <th>Hora.Entrada</th>
+                    <th>Hora.Salida</th>
+                    <th>Situación</th>
+                    <th>Area</th>
+                    <th>Grado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empleado in empleados %}
+                <tr>
+                    <td>{{ empleado.id }}</td>
+                    <td>{{ empleado.nombre }}</td>
+                    <td>{{ empleado.apellido_paterno }}</td>
+                    <td>{{ empleado.apellido_materno }}</td>
+                    <td>{{ empleado.matricula }}</td>
+                    <td>{{ empleado.hora.entrada }}</td>
+                    <td>{{ empleado.hora.salida }}</td>
+                    <td>{{ empleado.situación }}</td>
+                    <td>{{empleado.area}}</td>
+                    <td>{{empleado.grado}}</td>
+                        <a href="{% url 'editar_empleado' empleado.id %}" class="btn btn-lg">
+                            <i class="bi bi-pencil-fill"></i> Editar
+                        </a>
+                        <form method="POST" action="{% url 'eliminar_empleado' empleado.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-lg" onclick="return confirm('¿Estás seguro de eliminar este registro?');">
+                                <i class="bi bi-trash-fill"></i> Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No hay registros disponibles.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+   
+
+        <!-- Botones de la parte inferior -->
+        <div class="button-container">
+            <button class="bottom-button" onclick="window.location.href='{% url 'add_element' %}'">Añadir Nuevo elemento</button>
+            <button class="bottom-button" onclick="window.location.href='{% url 'modify_element' %}'">Modificar elemento</button>
+            <button class="bottom-button" onclick="window.location.href='{% url 'registrar_entrada_salida' %}'">Registrar Entrada/Salida</button>
+            <button class="bottom-button">Generar reporte</button>
+        </div>
+        
+        <!-- Mensaje de éxito/error -->
+        {% if mensaje %}
+            <p>{{ mensaje }}</p>
+        {% endif %}
+       
+    </div>
+    <script>
+        function toggleProfileMenu() {
+            document.getElementById('profile-menu').style.display = 'block';
+        }
+        function closeProfileMenu() {
+            document.getElementById('profile-menu').style.display = 'none';
+        }
+        document.addEventListener('click', function (event) {
+            var profileMenu = document.getElementById('profile-menu');
+            var profileImage = document.querySelector('.profile-image');
+            if (!profileMenu.contains(event.target) && event.target !== profileImage) {
+                closeProfileMenu();
+            }
+        });
+    </script>
+</body>
+</html>

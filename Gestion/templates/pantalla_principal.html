@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla Principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E6DCBC;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #798C8C;
+        }
+        .rol {
+            color: white;
+            font-weight: normal;
+            text-shadow: 0 0 5px#5B7373;
+        }
+        .container {
+            background-color: #94A3A3;
+            margin-top: 10%;
+            margin-bottom: 5%;
+            padding-top: 50px;
+            padding-left: 100px;
+            padding-right: 100px;
+            padding-bottom: 75px;
+            border-radius: 50px;
+            width: 80%;
+            max-width: 1000px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 75px;
+            margin-top: 5%;
+            color: #ffff;
+            text-shadow: 0 0 5px#5B7373;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #5B7373;
+        }
+        td.buttons {
+            border: 0cm;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #798C8C;
+            color: #fff;
+        }
+        tr {
+            background-color: #adbbbb;
+        }
+        tr:hover {
+            background-color: #d1d1d1;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1%;
+        }
+        .buttons a, .buttons button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            background-color: #5B7373;
+            text-align: center;
+            margin-right: 10px;
+        }
+        .topbuttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0%;
+        }
+        a.logint  {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            background-color: #5B7373;
+            text-align: center;
+            margin-right: 10px;
+        }
+        a.logint:hover  {
+            background-color: #C8BC91
+        }
+        a.contraseña {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            background-color: #5B7373;
+            margin-right: 10px;
+        }
+        a.contraseña:hover {
+            background-color: #C8BC91;
+        }
+        .buttons a.delete {
+            background-color: #C8BC91;
+        }
+        .buttons a:hover, .buttons button:hover {
+            background-color: #798C8C;
+        }
+        .add-new {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .add-new a {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            background-color: #5B7373;
+        }
+        .add-new a:hover {
+            background-color: #798C8C;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-bar form {
+            display: inline-block;
+        }
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #5B7373;
+            border-radius: 5px;
+        }
+        .search-bar button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #5B7373;
+            color: #fff;
+            margin-left: 10px;
+        }
+        .search-bar button:hover {
+            background-color: #798C8C;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbuttons">
+            <a href="{% url 'change_password' %}" class="contraseña">Cambiar Contraseña</a>
+            <a href="{% url 'login' %}" class="logint">Cerrar Sesión</a>
+        </div>
+        <h1>Lista de Empleados</h1>
+        {% if user.is_authenticated %}
+            <p class="rol">Rol actual: {{ user.rol }}</p>
+            <!-- Barra de búsqueda -->
+            <div class="search-bar">
+                <form method="get" action="{% url 'search' %}">
+                    <input type="text" name="query" placeholder="Buscar empleados...">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="buttons">
+                {% if user.rol == 'admin' or user.rol == 'guardia' %}
+                    <button onclick="location.href='{% url 'gestion_entrada_salida' %}'">Gestionar Entrada/Salida</button>
+                {% endif %}
+                {% if user.rol == 'admin' %}
+                    <a href="{% url 'add_element' %}">Añadir Nuevo Empleado</a>
+                {% endif %}
+                <button onclick="location.href='{% url 'historial_entrada_salida' %}'">Ver Historial</button>
+            </div>
+        {% else %}
+            <p>Por favor, <a href="{% url 'login' %}">inicia sesión</a> para acceder a esta página.</p>
+        {% endif %}
+            {% if empleados %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>Matrícula</th>
+                        <th>Cargo</th>
+                        <th>Área</th>
+                        <th>Grado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for empleado in empleados %}
+                        <tr>
+                            <td>{{ empleado.nombre }}</td>
+                            <td>{{ empleado.apellido_paterno }}</td>
+                            <td>{{ empleado.apellido_materno }}</td>
+                            <td>{{ empleado.matricula }}</td>
+                            <td>{{ empleado.cargo }}</td>
+                            <td>{{ empleado.area }}</td>
+                            <td>{{ empleado.grado }}</td>
+                            <td class="buttons">
+                                {% if user.rol == 'admin' %} 
+                                    <a href="{% url 'modify_element' empleado.id %}">Modificar</a> 
+                                    <a href="{% url 'delete_element' empleado.id %}" class="delete">Eliminar</a> 
+                                {% else %}  
+                                    <span>No tienes permisos de acceso.</span> 
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay empleados registrados.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Entrada y Salida</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #798C8C;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 100px auto;
+            padding: 50px;
+            background-color: #94A3A3;
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffff;
+            text-shadow: 0 0 5px #5B7373;
+        }
+
+        .buttons {
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-left: 15%;
+            margin-right: 0%;
+        }
+        
+        #goback {
+            background-color: #5B7373;
+        }
+
+        #export {
+            background-color: #C8BC91;
+        }
+
+        #goback:hover, #export:hover {
+            background-color: #798C8C;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #becaca;
+        }
+
+        th {
+            background-color: #5B7373;
+            color: #ffff
+        }
+
+        tr:hover {
+            background-color: #adbbbb;
+        }
+        
+        .filter-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .filter-form input[type="date"] {
+            padding: 8px;
+            margin: 0 10px;
+            border-radius: 5px;
+            border: 1px solid #5B7373;
+        }
+        
+        .filter-form button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #C8BC91;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+        }
+        
+        .filter-form button:hover {
+            background-color: #798C8C;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Historial de Entrada y Salida</h1>
+        
+        <form method="POST" class="filter-form">
+            {% csrf_token %}
+            {{ form.fecha_inicio.label_tag }}: <input type="date" name="fecha_inicio" value="{{ form.fecha_inicio.value }}">
+            {{ form.fecha_fin.label_tag }}: <input type="date" name="fecha_fin" value="{{ form.fecha_fin.value }}">
+            <button type="submit">Filtrar</button>
+        </form>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Matrícula</th>
+                    <th>Acción</th>
+                    <th>Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro.empleado.nombre }}</td>
+                    <td>{{ registro.empleado.apellido_paterno }}</td>
+                    <td>{{ registro.empleado.apellido_materno }}</td>
+                    <td>{{ registro.empleado.matricula }}</td>
+                    <td>{{ registro.accion }}</td>
+                    <td>{{ registro.fecha_hora }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <button class="buttons" id="goback" onclick="location.href='{% url 'pantalla_principal' %}'">Regresar a la Pantalla Principal</button>
+            {% if user.rol == 'admin' or user.rol == 'servicios' %}
+                <button class="buttons" id="export" onclick="location.href='{% url 'exportar_historial_excel' %}'">Exportar a Excel</button>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
