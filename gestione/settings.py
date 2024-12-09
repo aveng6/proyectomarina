@@ -23,13 +23,12 @@ import os
 SECRET_KEY = os.environ.get("SECRET_KEY", default="sdsd1234567890")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "RENDER" not in os.environ
+DEBUG = "False" 
 
 
-ALLOWED_HOSTS = []
-RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+
 
 # Application definition
 
@@ -65,7 +64,7 @@ LOGIN_REDIRECT_URL = '/redirect_user/'
 LOGIN_URL = '/login/'  # Ajusta según la URL de tu página de inicio de sesión
 LOGIN_REDIRECT_URL = 'pantalla_principal'  # Redirige a la página principal después de iniciar sesión
 
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 MIDDLEWARE = [
@@ -118,20 +117,21 @@ WSGI_APPLICATION = 'gestione.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+import os
+import dj_database_url
+
+# Configuración de base de datos para local y heroku
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gestionp',
-        'USER': 'root',  
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'mysql://root:@localhost:3306/gestionp')
+    )
 }
 
+# Agregar opciones específicas para MySQL
+DATABASES['default']['OPTIONS'] = {
+    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+}
 
 
 # Password validation
