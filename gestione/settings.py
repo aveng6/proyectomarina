@@ -176,8 +176,9 @@ STATIC_URL = '/static/'
 # Directorio donde se recolectarán los archivos estáticos
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Añadir configuración para servir archivos estáticos en producción (en caso de usar Heroku)
 
+# Añadir configuración para servir archivos estáticos en producción (en caso de usar Heroku)
+django_heroku.settings(locals())
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
