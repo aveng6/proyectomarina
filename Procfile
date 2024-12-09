@@ -1,2 +1,2 @@
-web: gunicorn gestion.wsgi
+web: gunicorn gestione.wsgi
 
