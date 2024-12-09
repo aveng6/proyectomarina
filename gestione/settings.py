@@ -122,11 +122,13 @@ import os
 import dj_database_url
 
 # Configuración de base de datos para local y heroku
+import dj_database_url
+import os
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'mysql://root:@localhost:3306/gestionp')
-    )
+    'default': dj_database_url.config(env='JAWSDB_URL', conn_max_age=600)
 }
+
 
 # Agregar opciones específicas para MySQL
 DATABASES['default']['OPTIONS'] = {
