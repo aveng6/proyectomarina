@@ -1,7 +1,7 @@
 asgiref==3.8.1
 cffi==1.17.1
 clr-loader==0.2.6
-distlib==0.3.8
+distlib==0.3.8  
 dj-database-url==2.3.0
 Django==5.1.4
 django-heroku==0.3.1
