@@ -125,8 +125,17 @@ import dj_database_url
 import dj_database_url
 import os
 
+
+
 DATABASES = {
-    'default': dj_database_url.config(env='JAWSDB_URL', conn_max_age=600)
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gestionp',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',  # O una dirección IP o nombre de host del servidor MySQL
+        'PORT': '3306',  # Puerto por defecto de MySQL
+    }
 }
 
 
